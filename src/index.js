@@ -12,10 +12,16 @@ app.post("/account", (req, res) => {
     name,
   } = req.body;
 
-  const id = uuidv4();
+  const cpfAlreadyExists = customers.some(
+    (customer) => customer.cpf === cpf
+  );
+
+  if(cpfAlreadyExists) {
+    return res.status(400).json({error: "CPF already exists!"});
+  };
 
   customers.push({
-    id,
+    id: uuidv4(),
     name,
     cpf,
     statement: []
@@ -23,6 +29,5 @@ app.post("/account", (req, res) => {
 
   return res.status(201).send();
 });
-
 
 app.listen(3333);
