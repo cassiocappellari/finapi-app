@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 
@@ -136,6 +137,22 @@ app.get("/account", (req, res) => {
   const { customer } = req;
 
   return res.json(customer)
+})
+
+app.delete("/account", (req, res) => {
+  const { customer } = req;
+
+  customers.splice(customer, 1);
+
+  return res.status(200).json(customers)
+})
+
+app.get("/balance", (req, res) => {
+  const { customer } = req;
+
+  const balance = getBalance(customer.statement);
+
+  return res.json(balance);
 })
 
 app.listen(3333);
