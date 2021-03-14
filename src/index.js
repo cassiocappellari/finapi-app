@@ -78,9 +78,9 @@ app.post("/deposit", (req, res) => {
     type: "credit"
   };
 
-  customer.statement.push({
+  customer.statement.push(
     statementOperation
-  });
+  );
 
   return res.status(201).send();
 });
@@ -101,11 +101,26 @@ app.post("/withdraw", (req, res) => {
     type: "debit"
   };
 
-  customer.statement.push({
+  customer.statement.push(
     statementOperation
-  });
+  );
 
   return res.status(201).send();
+});
+
+app.get("/statement/date", (req, res) => {
+  const { customer } = req;
+  const { date } = req.query;
+
+  const dateFormat = new Date(date + " 00:00");
+
+  const statement = customer.statement.filter(
+    (statement) => 
+      statement.created_at.toDateString() === 
+      new Date(dateFormat).toDateString()
+  );
+
+  return res.json(statement);
 });
 
 app.listen(3333);
